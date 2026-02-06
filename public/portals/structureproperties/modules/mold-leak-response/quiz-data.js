@@ -1,31 +1,49 @@
+// quiz-data.js
+// Times are in seconds.
+
 window.QS_QUIZ = {
   moduleId: "mold-leak-response",
   checkpoints: [
     {
       t: 35,
-      title: "Initial Response",
+      title: "Causes + risk",
       questions: [
         {
-          q: "What is the FIRST action when a mold or leak issue is reported?",
+          q: "Common causes of mold/water intrusion include:",
           a: [
-            "Ignore it until maintenance hours",
-            "Assess the situation and stop the source if possible",
-            "Call the resident back next week"
+            "Humidity, condensation, and water intrusion from leaks",
+            "Only pest activity",
+            "Only paint quality"
           ],
-          correct: 1
+          correct: 0
         }
       ]
     },
     {
-      t: 95,
-      title: "Health & Safety",
+      t: 75,
+      title: "Classify the leak",
       questions: [
         {
-          q: "Why is mold considered a serious issue?",
+          q: "A key step early on is to determine whether the leak is:",
           a: [
-            "It can cause health risks and property damage",
-            "It only smells bad",
-            "It is cosmetic only"
+            "Minor or major",
+            "Personal or business",
+            "Old or new paint"
+          ],
+          correct: 0
+        }
+      ]
+    },
+    {
+      t: 115,
+      title: "Timing requirement",
+      questions: [
+        {
+          q: "Within what time window must a response path be chosen?",
+          a: [
+            "Within 24 hours",
+            "Within 7 days",
+            "Within 30 days"
           ],
           correct: 0
         }
@@ -33,16 +51,31 @@ window.QS_QUIZ = {
     },
     {
       t: 155,
-      title: "Escalation",
+      title: "Testing after containment",
       questions: [
         {
-          q: "Who should be notified for significant leaks or mold issues?",
+          q: "After leaks are contained, what environmental testing may be required?",
           a: [
-            "Only the resident",
-            "No one",
-            "Property Manager or appropriate leadership"
+            "Lead, asbestos, and mold",
+            "Only temperature and humidity",
+            "Only paint color match"
           ],
-          correct: 2
+          correct: 0
+        }
+      ]
+    },
+    {
+      t: 195,
+      title: "Minor vs major incidents",
+      questions: [
+        {
+          q: "Major incidents often justify mitigation primarily to:",
+          a: [
+            "Prevent larger losses",
+            "Delay repairs",
+            "Avoid notifying anyone"
+          ],
+          correct: 0
         }
       ]
     }
