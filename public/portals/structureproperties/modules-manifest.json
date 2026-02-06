@@ -1,0 +1,77 @@
+[
+  {
+    "id": "introduction",
+    "title": "Introduction",
+    "live": false
+  },
+  {
+    "id": "safety-security",
+    "title": "Safety & Security",
+    "live": false
+  },
+  {
+    "id": "emergencies",
+    "title": "Emergencies",
+    "live": false
+  },
+  {
+    "id": "after-hours-protocol",
+    "title": "After-Hours Protocol",
+    "live": false
+  },
+  {
+    "id": "resident-manager-building-maintenance",
+    "title": "Resident Manager Building Maintenance",
+    "live": false
+  },
+  {
+    "id": "resident-manager-maintenance-request",
+    "title": "Resident Manager Maintenance Request",
+    "live": false
+  },
+  {
+    "id": "mold-leak-response",
+    "title": "Mold & Leak Response",
+    "live": false
+  },
+  {
+    "id": "bed-bug-remediation",
+    "title": "Bed Bug Remediation",
+    "live": false
+  },
+  {
+    "id": "winterization",
+    "title": "Winterization",
+    "live": false
+  },
+  {
+    "id": "move-in-process",
+    "title": "Move-In Process",
+    "live": false
+  },
+  {
+    "id": "move-out-process",
+    "title": "Move-Out Process",
+    "live": false
+  },
+  {
+    "id": "pre-move-out-rentals",
+    "title": "Pre-Move-Out Rentals (PMR)",
+    "live": false
+  },
+  {
+    "id": "early-lease-termination",
+    "title": "Early Lease Termination",
+    "live": false
+  },
+  {
+    "id": "annual-certifications",
+    "title": "Annual Certifications",
+    "live": false
+  },
+  {
+    "id": "sub-occupant-costa-hawkins",
+    "title": "Sub-Occupant & Costa Hawkins (6.14)",
+    "live": false
+  }
+]
