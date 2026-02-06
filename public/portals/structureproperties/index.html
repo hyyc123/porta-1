@@ -1,198 +1,457 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Structure Properties Training Portal</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-  :root{
-    --bg:#020617; --panel:rgba(255,255,255,.03); --border:rgba(255,255,255,.10);
-    --text:#e5e7eb; --muted:#94a3b8;
-    --shadow:0 14px 50px rgba(0,0,0,.55);
-    --r:18px;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    font-family:system-ui;
-    background:radial-gradient(1200px 700px at 10% 10%, rgba(96,165,250,0.18), transparent 55%),
-               radial-gradient(1000px 600px at 90% 20%, rgba(110,231,183,0.12), transparent 60%),
-               var(--bg);
-    color:var(--text);
-  }
-  header{
-    display:flex; align-items:center; gap:14px;
-    padding:18px 20px;
-    border-bottom:1px solid rgba(255,255,255,.08);
-  }
-  header img{height:40px}
-  h1{margin:0; font-size:28px; font-weight:950; letter-spacing:-.02em}
-  .grid{
-    padding:20px;
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-    gap:16px;
-  }
-  .card{
-    border:1px solid var(--border);
-    border-radius:var(--r);
-    overflow:hidden;
-    background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-    box-shadow:var(--shadow);
-    display:flex;
-    flex-direction:column;
-    min-height:320px;
-  }
-  .thumb{aspect-ratio:16/9;background:#020617}
-  .thumb img{width:100%;height:100%;object-fit:cover}
-  .content{padding:14px; display:flex; flex-direction:column; gap:10px; flex:1}
-  .title{font-weight:950; font-size:16px; line-height:1.2}
-  .row{display:flex; align-items:center; justify-content:space-between; gap:10px}
-  .pill{
-    font-size:11px;
-    font-weight:950;
-    padding:6px 10px;
-    border-radius:999px;
-    border:1px solid rgba(255,255,255,0.14);
-    background:rgba(0,0,0,0.20);
-    color:var(--muted);
-    white-space:nowrap;
-  }
-  .pill.progress{border-color:rgba(96,165,250,0.45); background:rgba(96,165,250,0.12); color:#bfdbfe}
-  .pill.done{border-color:rgba(110,231,183,0.45); background:rgba(110,231,183,0.12); color:#bbf7d0}
-  .btn{
-    display:inline-flex; justify-content:center; align-items:center;
-    width:100%;
-    padding:12px;
-    border-radius:14px;
-    border:1px solid rgba(110,231,183,0.35);
-    background:linear-gradient(180deg, rgba(110,231,183,0.22), rgba(110,231,183,0.10));
-    color:var(--text);
-    font-weight:950;
-    text-decoration:none;
-    cursor:pointer;
-  }
-  .btn.secondary{
-    border-color:rgba(255,255,255,0.14);
-    background:rgba(0,0,0,0.18);
-    color:var(--muted);
-  }
-  .hint{font-size:12px;color:var(--muted)}
-</style>
+  <meta charset="UTF-8">
+  <title>Structure Properties Training Portal</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root {
+      --bg: #020617;
+      --panel: rgba(255, 255, 255, .03);
+      --border: rgba(255, 255, 255, .10);
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --shadow: 0 14px 50px rgba(0, 0, 0, .55);
+      --r: 18px;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui;
+      background: radial-gradient(1200px 700px at 10% 10%, rgba(96, 165, 250, 0.18), transparent 55%),
+        radial-gradient(1000px 600px at 90% 20%, rgba(110, 231, 183, 0.12), transparent 60%),
+        var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    header img {
+      height: 40px
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 950;
+      letter-spacing: -.02em
+    }
+
+    .grid {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      min-height: 320px;
+    }
+
+    .thumb {
+      aspect-ratio: 16/9;
+      background: #020617
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .content {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1
+    }
+
+    .title {
+      font-weight: 950;
+      font-size: 16px;
+      line-height: 1.2
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px
+    }
+
+    .pill {
+      font-size: 11px;
+      font-weight: 950;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(0, 0, 0, 0.20);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .pill.progress {
+      border-color: rgba(96, 165, 250, 0.45);
+      background: rgba(96, 165, 250, 0.12);
+      color: #bfdbfe
+    }
+
+    .pill.done {
+      border-color: rgba(110, 231, 183, 0.45);
+      background: rgba(110, 231, 183, 0.12);
+      color: #bbf7d0
+    }
+
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(110, 231, 183, 0.35);
+      background: linear-gradient(180deg, rgba(110, 231, 183, 0.22), rgba(110, 231, 183, 0.10));
+      color: var(--text);
+      font-weight: 950;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .btn.secondary {
+      border-color: rgba(255, 255, 255, 0.14);
+      background: rgba(0, 0, 0, 0.18);
+      color: var(--muted);
+    }
+
+    .btn:disabled {
+      opacity: .6;
+      cursor: not-allowed
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      background: rgba(2, 6, 23, .92);
+      border: 1px solid rgba(255, 255, 255, .14);
+      padding: 12px 14px;
+      border-radius: 14px;
+      color: #e5e7eb;
+      box-shadow: var(--shadow);
+      font-weight: 850;
+      font-size: 13px;
+      display: none;
+      max-width: 92vw;
+      z-index: 9999;
+    }
+
+    /* Modal */
+    #modalOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 9998;
+    }
+
+    #modal {
+      width: min(520px, 100%);
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 18px;
+      background: rgba(2, 6, 23, .96);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    #modalTitle {
+      margin: 0 0 6px;
+      font-size: 16px;
+      font-weight: 950
+    }
+
+    #modalBody {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45
+    }
+
+    .modalRow {
+      display: flex;
+      gap: 10px
+    }
+  </style>
 </head>
+
 <body>
 
-<header>
-  <img src="./assets/structureproperties-logo.svg" alt="Structure Properties">
-  <h1>Structure Properties Training Portal</h1>
-</header>
+  <header>
+    <img src="./assets/structureproperties-logo.svg" alt="Structure Properties">
+    <h1>Structure Properties Training Portal</h1>
+  </header>
 
-<div class="grid" id="grid"></div>
+  <div class="grid" id="grid"></div>
 
-<script>
-  // Optional: set a default webhook for all modules.
-  // If a module's module.json contains "webhookUrl", that value takes precedence.
-  const GLOBAL_WEBHOOK_URL = "";
+  <div id="toast"></div>
 
-  function getPortalSlug(){
-    // /portals/<company>/index.html
-    const parts = location.pathname.split("/").filter(Boolean);
-    const i = parts.indexOf("portals");
-    return i >= 0 ? (parts[i+1] || "") : "";
-  }
+  <div id="modalOverlay">
+    <div id="modal">
+      <h2 id="modalTitle">Ready to submit?</h2>
+      <p id="modalBody"></p>
+      <div class="modalRow">
+        <button class="btn secondary" id="modalCancel" type="button">Not yet</button>
+        <button class="btn" id="modalConfirm" type="button">Yes, submit</button>
+      </div>
+    </div>
+  </div>
 
-  function getLearner(){
-    return {
-      userId: localStorage.getItem("qs_user_id") || "",
-      email: localStorage.getItem("qs_user_email") || "",
-      name: localStorage.getItem("qs_user_name") || "",
-      companySlug: localStorage.getItem("qs_company_slug") || getPortalSlug(),
-    };
-  }
+  <script>
+    // ✅ Global webhook for ALL modules (module.json webhookUrl overrides if present)
+    window.GLOBAL_WEBHOOK_URL =
+      "https://structureproperties.app.n8n.cloud/webhook/37fc702d-8713-43f4-a1eb-22af8e3e2389";
 
-  function getStatus(moduleId){
-    const started = localStorage.getItem("qs_started_" + moduleId);
-    const done = localStorage.getItem("qs_completed_" + moduleId);
-    const submitted = localStorage.getItem("qs_submitted_" + moduleId);
+    const GLOBAL_WEBHOOK_URL = window.GLOBAL_WEBHOOK_URL;
 
-    if (submitted) return { label: "SUBMITTED", cls: "done" };
-    if (done) return { label: "COMPLETED", cls: "done" };
-    if (started) return { label: "IN PROGRESS", cls: "progress" };
-    return { label: "NOT STARTED", cls: "" };
-  }
-
-  async function getModuleConfig(basePath){
-    try{
-      const r = await fetch(basePath + "/module.json", { cache:"no-store" });
-      return await r.json();
-    }catch(e){
-      return {};
-    }
-  }
-
-  async function submitModule({ moduleId, title, moduleBase }){
-    const cfg = await getModuleConfig(moduleBase);
-    const webhookUrl = (cfg.webhookUrl || GLOBAL_WEBHOOK_URL || "").trim();
-
-    if (!webhookUrl){
-      alert("No webhook URL configured for this module. Add webhookUrl to module.json or set GLOBAL_WEBHOOK_URL in index.html.");
-      return;
+    function showToast(msg, ms = 2400) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => { t.style.display = "none"; }, ms);
     }
 
-    const payload = {
-      learner: getLearner(),
-      portal: { slug: getPortalSlug() },
-      moduleId,
-      title,
-      submittedAt: new Date().toISOString(),
-      completedAt: localStorage.getItem("qs_completed_" + moduleId),
-      startedAt: localStorage.getItem("qs_started_" + moduleId),
-      timeSpentSeconds: Number(localStorage.getItem("qs_watch_" + moduleId) || "0"),
-      wrongAnswers: Number(localStorage.getItem("qs_wrong_" + moduleId) || "0"),
-      client: {
-        userAgent: navigator.userAgent,
-        tzOffsetMinutes: new Date().getTimezoneOffset(),
-      },
-    };
+    function openModal({ title, body, onConfirm }) {
+      const overlay = document.getElementById("modalOverlay");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalBody = document.getElementById("modalBody");
+      const cancelBtn = document.getElementById("modalCancel");
+      const confirmBtn = document.getElementById("modalConfirm");
 
-    const ok = confirm(`Submit "${title}" now?`);
-    if (!ok) return;
+      modalTitle.textContent = title || "Ready to submit?";
+      modalBody.textContent = body || "";
 
-    try{
-      const res = await fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+      overlay.style.display = "flex";
+
+      const close = () => {
+        overlay.style.display = "none";
+        cancelBtn.onclick = null;
+        confirmBtn.onclick = null;
+      };
+
+      cancelBtn.onclick = () => close();
+      confirmBtn.onclick = async () => {
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = "Submitting...";
+        try {
+          await onConfirm?.();
+          close();
+        } finally {
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = "Yes, submit";
+        }
+      };
+    }
+
+    function getPortalSlug() {
+      const parts = location.pathname.split("/").filter(Boolean);
+      const i = parts.indexOf("portals");
+      return i >= 0 ? (parts[i + 1] || "") : "";
+    }
+
+    // ✅ Pull Supabase user email/name from the default auth storage keys
+    function getSupabaseAuthUser() {
+      try {
+        // Supabase stores auth under a key like: sb-<project-ref>-auth-token
+        const keys = Object.keys(localStorage);
+        const authKey = keys.find(k => k.startsWith("sb-") && k.endsWith("-auth-token"));
+        if (!authKey) return null;
+
+        const raw = localStorage.getItem(authKey);
+        if (!raw) return null;
+
+        const parsed = JSON.parse(raw);
+        const user = parsed?.user || parsed?.currentSession?.user || parsed?.session?.user;
+
+        if (!user) return null;
+
+        return {
+          id: user.id || "",
+          email: user.email || "",
+          name:
+            user.user_metadata?.full_name ||
+            user.user_metadata?.name ||
+            user.user_metadata?.first_name ||
+            ""
+        };
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function getLearner() {
+      const sb = getSupabaseAuthUser();
+
+      // Prefer Supabase
+      const email = (sb?.email || localStorage.getItem("qs_user_email") || "").trim();
+      const name = (sb?.name || localStorage.getItem("qs_user_name") || "").trim();
+      const userId = (sb?.id || localStorage.getItem("qs_user_id") || "").trim();
+
+      return {
+        userId,
+        email,
+        name,
+        companySlug: localStorage.getItem("qs_company_slug") || getPortalSlug(),
+      };
+    }
+
+    function getStatus(moduleId) {
+      const started = localStorage.getItem("qs_started_" + moduleId);
+      const done = localStorage.getItem("qs_completed_" + moduleId);
+      const submitted = localStorage.getItem("qs_submitted_" + moduleId);
+
+      if (submitted) return { label: "SUBMITTED", cls: "done" };
+      if (done) return { label: "COMPLETED", cls: "done" };
+      if (started) return { label: "IN PROGRESS", cls: "progress" };
+      return { label: "NOT STARTED", cls: "" };
+    }
+
+    async function getModuleConfig(basePath) {
+      try {
+        const r = await fetch(basePath + "/module.json", { cache: "no-store" });
+        return await r.json();
+      } catch (e) {
+        return {};
+      }
+    }
+
+    // ✅ CORS-proof webhook: send via GET query params (like the demo)
+    function sendWebhookGet(webhookUrl, payload) {
+      return new Promise((resolve) => {
+        try {
+          const u = new URL(webhookUrl);
+
+          // Flatten the important fields as query params
+          const learner = payload.learner || {};
+          u.searchParams.set("portal", payload.portal?.slug || "");
+          u.searchParams.set("moduleId", payload.moduleId || "");
+          u.searchParams.set("title", payload.title || "");
+          u.searchParams.set("email", learner.email || "");
+          u.searchParams.set("userId", learner.userId || "");
+          u.searchParams.set("name", learner.name || "");
+          u.searchParams.set("startedAt", payload.startedAt || "");
+          u.searchParams.set("completedAt", payload.completedAt || "");
+          u.searchParams.set("submittedAt", payload.submittedAt || "");
+          u.searchParams.set("timeSpentSeconds", String(payload.timeSpentSeconds || 0));
+          u.searchParams.set("wrongAnswers", String(payload.wrongAnswers || 0));
+
+          // Optional useful fields
+          u.searchParams.set("userAgent", payload.client?.userAgent || "");
+          u.searchParams.set("tzOffsetMinutes", String(payload.client?.tzOffsetMinutes ?? ""));
+
+          // Use an image beacon so the request ALWAYS fires (no CORS issues)
+          const img = new Image();
+          const done = () => resolve(true);
+          img.onload = done;
+          img.onerror = done;
+          img.src = u.toString();
+
+          // Safety resolve even if browser doesn't call onload/onerror
+          setTimeout(done, 900);
+        } catch (e) {
+          console.error(e);
+          resolve(false);
+        }
       });
-      if (!res.ok) throw new Error(`Webhook returned ${res.status}`);
+    }
+
+    async function submitModule({ moduleId, title, moduleBase }) {
+      const cfg = await getModuleConfig(moduleBase);
+      const webhookUrl = (cfg.webhookUrl || GLOBAL_WEBHOOK_URL || "").trim();
+      if (!webhookUrl) {
+        showToast("No webhook configured.", 3000);
+        return false;
+      }
+
+      const payload = {
+        learner: getLearner(),
+        portal: { slug: getPortalSlug() },
+        moduleId,
+        title,
+        submittedAt: new Date().toISOString(),
+        completedAt: localStorage.getItem("qs_completed_" + moduleId) || "",
+        startedAt: localStorage.getItem("qs_started_" + moduleId) || "",
+        timeSpentSeconds: Number(localStorage.getItem("qs_watch_" + moduleId) || "0"),
+        wrongAnswers: Number(localStorage.getItem("qs_wrong_" + moduleId) || "0"),
+        client: {
+          userAgent: navigator.userAgent,
+          tzOffsetMinutes: new Date().getTimezoneOffset(),
+        },
+      };
+
+      // Ensure we have at least email (or userId) — otherwise n8n won't know who
+      if (!payload.learner.email && !payload.learner.userId) {
+        showToast("No logged-in user found (missing email). Check Supabase auth.", 3600);
+        return false;
+      }
+
+      const ok = await sendWebhookGet(webhookUrl, payload);
+      if (!ok) {
+        showToast("Submit failed (request not sent).", 3200);
+        return false;
+      }
 
       localStorage.setItem("qs_submitted_" + moduleId, payload.submittedAt);
+      showToast("Submitted.", 2200);
       return true;
-    }catch(err){
-      console.error(err);
-      alert("Submit failed. Check the console and verify the webhook URL accepts POST JSON.");
-      return false;
     }
-  }
 
-  fetch('./modules-manifest.json', { cache:"no-store" })
-    .then(r=>r.json())
-    .then(async mods=>{
-      const g=document.getElementById('grid');
+    fetch('./modules-manifest.json', { cache: "no-store" })
+      .then(r => r.json())
+      .then(async mods => {
+        const g = document.getElementById('grid');
 
-      for (const m of mods){
-        const moduleBase = `./modules/structureproperties/${m.id}`;
-        const status = getStatus(m.id);
+        for (const m of mods) {
+          const moduleBase = `./modules/structureproperties/${m.id}`;
+          const status = getStatus(m.id);
 
-        const cfg = await getModuleConfig(moduleBase);
-        const enabled = Boolean((cfg.videoUrl || "").trim());
-        const isCompleted = Boolean(localStorage.getItem("qs_completed_" + m.id));
-        const isSubmitted = Boolean(localStorage.getItem("qs_submitted_" + m.id));
+          const cfg = await getModuleConfig(moduleBase);
+          const enabled = Boolean((cfg.videoUrl || "").trim());
+          const isCompleted = Boolean(localStorage.getItem("qs_completed_" + m.id));
+          const isSubmitted = Boolean(localStorage.getItem("qs_submitted_" + m.id));
 
-        const card=document.createElement('div');
-        card.className='card';
+          const card = document.createElement('div');
+          card.className = 'card';
 
-        card.innerHTML=`
+          card.innerHTML = `
           <div class="thumb">
             <img src="${moduleBase}/thumb.png" onerror="this.src='./assets/placeholder-thumb.svg'">
           </div>
@@ -203,51 +462,63 @@
             </div>
 
             <div class="hint">
-              ${
-                enabled
-                  ? (isCompleted && !isSubmitted
-                      ? "Completed — needs to be submitted."
-                      : (isSubmitted ? "Submitted." : "Ready to start."))
-                  : "Placeholder: add Blob videoUrl in module.json + drop quiz.html/thumb.png."
-              }
+              ${enabled
+              ? (isCompleted && !isSubmitted
+                ? "Completed — needs to be submitted."
+                : (isSubmitted ? "Submitted." : "Ready to start."))
+              : "Placeholder: add Blob videoUrl in module.json + drop quiz.html/thumb.png."
+            }
             </div>
 
-            ${
-              enabled
-                ? `<a class="btn" href="${moduleBase}/module.html">Start / Resume</a>`
-                : `<a class="btn secondary" href="${moduleBase}/module.html">Open (placeholder)</a>`
+            ${enabled
+              ? `<a class="btn" href="${moduleBase}/module.html">Start / Resume</a>`
+              : `<a class="btn secondary" href="${moduleBase}/module.html">Open (placeholder)</a>`
             }
 
-            ${
-              enabled && isCompleted && !isSubmitted
-                ? `<button class="btn secondary" data-submit="${m.id}">Submit</button>`
-                : ``
+            ${enabled && isCompleted && !isSubmitted
+              ? `<button class="btn secondary" data-submit="${m.id}">Submit</button>`
+              : ``
             }
           </div>
         `;
 
-        // Submit handler (only rendered when completed but not submitted)
-        const submitBtn = card.querySelector('[data-submit]');
-        if (submitBtn){
-          submitBtn.addEventListener('click', async (e)=>{
-            e.preventDefault();
-            const ok = await submitModule({ moduleId: m.id, title: m.title, moduleBase });
-            if (ok){
-              // re-render status pill + hint on success
-              const pill = card.querySelector('.pill');
-              pill.textContent = 'SUBMITTED';
-              pill.className = 'pill done';
-              const hint = card.querySelector('.hint');
-              hint.textContent = 'Submitted.';
-              submitBtn.remove();
-            }
-          });
+          const submitBtn = card.querySelector('[data-submit]');
+          if (submitBtn) {
+            submitBtn.addEventListener('click', async (e) => {
+              e.preventDefault();
+
+              openModal({
+                title: "Ready to submit?",
+                body: `This will submit "${m.title}" to your training records.`,
+                onConfirm: async () => {
+                  submitBtn.disabled = true;
+                  const old = submitBtn.textContent;
+                  submitBtn.textContent = "Submitting...";
+
+                  const ok = await submitModule({ moduleId: m.id, title: m.title, moduleBase });
+
+                  if (ok) {
+                    const pill = card.querySelector('.pill');
+                    pill.textContent = 'SUBMITTED';
+                    pill.className = 'pill done';
+
+                    const hint = card.querySelector('.hint');
+                    hint.textContent = 'Submitted.';
+
+                    submitBtn.remove();
+                  } else {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = old;
+                  }
+                }
+              });
+            });
+          }
+
+          g.appendChild(card);
         }
-
-        g.appendChild(card);
-      }
-    });
-</script>
+      });
+  </script>
 </body>
-</html>
 
+</html>
