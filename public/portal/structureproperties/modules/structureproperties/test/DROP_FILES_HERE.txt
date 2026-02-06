@@ -1,0 +1,8 @@
+Test Module
+
+Drop these files into this folder:
+- video.mp4  (training video)
+- thumb.png  (thumbnail)
+- quiz.html  (quiz HTML to run under the video)
+
+This demo will show Start / In Progress / Completed on the portal using localStorage.

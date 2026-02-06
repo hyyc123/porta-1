@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Structure Properties Training Portal</title>
+  <style>
+    :root{
+      --bg0:#020617;
+      --bg1:#0b1224;
+      --card: rgba(255,255,255,0.05);
+      --card2: rgba(255,255,255,0.02);
+      --border: rgba(255,255,255,0.10);
+      --text:#e9eefc;
+      --muted:#a7b4d6;
+      --muted2:#8aa3d8;
+      --accent:#6ee7b7;
+      --accent2:#60a5fa;
+      --danger:#fb7185;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(96,165,250,0.18), transparent 55%),
+        radial-gradient(1000px 600px at 90% 20%, rgba(110,231,183,0.12), transparent 60%),
+        radial-gradient(900px 600px at 50% 110%, rgba(96,165,250,0.10), transparent 60%),
+        #0b0f19;
+      color:var(--text);
+      min-height:100vh;
+    }
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:18px 24px;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.05));
+      position:sticky;
+      top:0;
+      backdrop-filter: blur(10px);
+      z-index:10;
+    }
+    .brand{display:flex;align-items:center;gap:14px;min-width:0}
+    .brand img{height:72px;width:auto;display:block}
+    .brand .titles{min-width:0}
+    h1{font-size:18px;margin:0;font-weight:950;letter-spacing:0.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sub{font-size:12px;color:var(--muted);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .user{
+      display:flex;align-items:center;gap:10px;
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.22);
+      padding:10px 12px;
+      border-radius:999px;
+      max-width:44vw;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: linear-gradient(180deg, rgba(110,231,183,0.9), rgba(96,165,250,0.7));
+      box-shadow: 0 0 18px rgba(110,231,183,0.25);
+      flex:0 0 auto;
+    }
+    .user .name{
+      font-size:12px;
+      color:var(--text);
+      font-weight:900;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+      gap:16px;
+      padding:22px 24px 34px;
+    }
+    .card{
+      border:1px solid rgba(255,255,255,0.10);
+      border-radius:18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow: 0 14px 50px rgba(0,0,0,0.45);
+      overflow:hidden;
+      position:relative;
+      min-height:190px;
+      display:flex;
+      flex-direction:column;
+    }
+    .thumb{
+      height:110px;
+      background:
+        radial-gradient(260px 180px at 20% 20%, rgba(96,165,250,0.18), transparent 60%),
+        radial-gradient(240px 180px at 80% 10%, rgba(110,231,183,0.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.00));
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      position:relative;
+      overflow:hidden;
+    }
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+      opacity:0;
+      transform: scale(1.02);
+      transition: opacity .25s ease;
+    }
+    .thumb img.loaded{opacity:1}
+    .content{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
+    .title{font-weight:950;font-size:15px;line-height:1.2;margin:0}
+    .meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border-radius:999px;
+      font-size:11px;font-weight:950;letter-spacing:0.3px;
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.18);
+      color: var(--muted);
+      text-transform:uppercase;
+    }
+    .badge.live{
+      border-color: rgba(110,231,183,0.35);
+      color: var(--text);
+      background: linear-gradient(180deg, rgba(110,231,183,0.20), rgba(110,231,183,0.10));
+    }
+    .btn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.18);
+      color: var(--text);
+      padding:9px 12px;
+      border-radius:12px;
+      font-weight:950;
+      font-size:12px;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:78px;
+    }
+    .btn:hover{border-color: rgba(255,255,255,0.20)}
+    .btn.primary{
+      border-color: rgba(110,231,183,0.35);
+      background: linear-gradient(180deg, rgba(110,231,183,0.22), rgba(110,231,183,0.12));
+    }
+    .btn[aria-disabled="true"]{
+      opacity:0.55;
+      cursor:not-allowed;
+    }
+    .footer-space{height:18px}
+    @media (max-width: 520px){
+      header{padding:14px 14px}
+      .grid{padding:16px 14px 22px}
+      .brand img{height:48px}
+      .user{max-width:52vw}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img src="structureproperties-logo.svg" alt="Structure Properties" />
+      <div class="titles">
+        <h1>Structure Properties Training Portal</h1>
+        <div class="sub">QuarterSmart • Internal Training</div>
+      </div>
+    </div>
+
+    <div class="user" title="Signed in account">
+      <div class="dot"></div>
+      <div id="accountName" class="name">Account</div>
+    </div>
+  </header>
+
+  <section class="grid" id="grid"></section>
+
+  <script>
+    // Account name:
+    // - Preferred: Supabase user metadata (if the portal is hosted inside your authenticated app later)
+    // - Fallback: localStorage from the /login page
+    const LS_NAME_KEY = "qs_full_name";
+    const LS_EMAIL_KEY = "qs_email";
+
+    function getLocalName(){
+      const n = (localStorage.getItem(LS_NAME_KEY) || "").trim();
+      if (n) return n;
+      const e = (localStorage.getItem(LS_EMAIL_KEY) || "").trim();
+      if (e) return e;
+      return "Account";
+    }
+
+    async function resolveAccountName(){
+      const el = document.getElementById("accountName");
+      el.textContent = getLocalName();
+
+      // If Supabase client is available globally in a future integration, use it.
+      try{
+        if (window.supabase && window.supabase.auth && window.supabase.auth.getUser){
+          const { data } = await window.supabase.auth.getUser();
+          const u = data && data.user;
+          const metaName = (u && u.user_metadata && (u.user_metadata.full_name || u.user_metadata.name)) || "";
+          if (metaName) el.textContent = metaName;
+          else if (u && u.email) el.textContent = u.email;
+        }
+      }catch(_){}
+    }
+
+    // Background export (no UI):
+    // If you later set a webhook URL in localStorage (or inject it server-side), the quiz module can POST to it.
+    // This portal does not display or reference webhook settings in the UI.
+    const ASSET_VERSION = "2026-02-06-1"; // bump to invalidate CDN/browser thumbnail cache
+    const LS_WEBHOOK_KEY = "qs_webhook_url";
+    function getWebhookUrl(){ return (localStorage.getItem(LS_WEBHOOK_KEY) || "").trim(); }
+
+    // Render modules
+    const grid = document.getElementById("grid");
+
+    function slugToPath(id){
+      // Your folder convention:
+      // /modules/structureproperties/<id>/
+      return "modules/structureproperties/" + id;
+    }
+
+    function makeCard(m){
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const thumb = document.createElement("div");
+      thumb.className = "thumb";
+
+      const img = document.createElement("img");
+      img.alt = m.title + " thumbnail";
+      img.src = slugToPath(m.id) + "/thumb.png?v=" + encodeURIComponent(ASSET_VERSION);
+      img.addEventListener("load", () => img.classList.add("loaded"));
+      img.addEventListener("error", () => { img.remove(); }); // silently fall back to gradient
+      thumb.appendChild(img);
+
+      const content = document.createElement("div");
+      content.className = "content";
+
+      const title = document.createElement("div");
+      title.className = "title";
+      title.textContent = m.title;
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+
+      // Completion state (set by each module page after webhook success)
+      const completedKey = "qs_completed_" + m.id;
+      const isCompleted = localStorage.getItem(completedKey) === "1";
+
+      const badge = document.createElement("div");
+      badge.className = "badge" + (isCompleted ? " live" : (m.live ? " live" : ""));
+      badge.textContent = isCompleted ? "Completed" : (m.live ? "In Progress" : "Coming Soon");
+
+      const btn = document.createElement("a");
+      btn.className = "btn " + (m.live ? "primary" : "");
+      btn.textContent = m.live ? (isCompleted ? "Review" : "Resume") : "View";
+      btn.href = m.live ? (slugToPath(m.id) + "/module.html") : "#";
+      if (!m.live){
+        btn.setAttribute("aria-disabled", "true");
+        btn.addEventListener("click", (e) => e.preventDefault());
+      }
+
+      meta.appendChild(badge);
+      meta.appendChild(btn);
+
+      content.appendChild(title);
+      content.appendChild(meta);
+
+      card.appendChild(thumb);
+      card.appendChild(content);
+
+      return card;
+    }
+
+    async function loadManifest(){
+      const res = await fetch("modules-manifest.json", { cache: "no-store" });
+      if (!res.ok) throw new Error("Unable to load manifest");
+      return res.json();
+    }
+
+    (async function init(){
+      await resolveAccountName();
+
+      const modules = await loadManifest();
+      grid.innerHTML = "";
+      for (const m of modules){
+        grid.appendChild(makeCard(m));
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,2 +1,2 @@
-# porta-1
+# structure-properties-training-portal
 structure-properties-training-portal

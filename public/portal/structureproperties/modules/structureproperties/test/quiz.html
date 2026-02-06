@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Module • Structure Properties</title>
+  <style>
+    :root {
+      --bg0:#020617;
+      --text:#e9eefc;
+      --muted:#a7b4d6;
+      --border: rgba(255,255,255,0.10);
+      --ok: rgba(110,231,183,0.95);
+      --bad: rgba(251,113,133,0.95);
+      --accent: rgba(96,165,250,0.95);
+      --cardA: rgba(255,255,255,0.06);
+      --cardB: rgba(255,255,255,0.02);
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(96,165,250,0.18), transparent 55%),
+        radial-gradient(1000px 600px at 90% 20%, rgba(110,231,183,0.12), transparent 60%),
+        var(--bg0);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 20px 48px;
+    }
+
+    header {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: 950;
+      letter-spacing: 0.2px;
+    }
+    .sub {
+      margin-top: 5px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+    .pill {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.18);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      white-space:nowrap;
+    }
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.18);
+      color: var(--text);
+      font-weight: 950;
+      cursor:pointer;
+      text-decoration:none;
+      user-select:none;
+    }
+    .btn:hover { border-color: rgba(255,255,255,0.20); }
+
+    .panel {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--cardA), var(--cardB));
+      border-radius: 18px;
+      box-shadow: 0 14px 50px rgba(0,0,0,0.55);
+      overflow:hidden;
+    }
+
+    .videoShell { background: #000; }
+    video {
+      width: 100%;
+      height: auto;
+      display:block;
+      background:#000;
+    }
+
+    /* Custom controls + markers */
+    .controls {
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: rgba(0,0,0,0.45);
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .iconBtn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      cursor:pointer;
+      font-weight: 950;
+    }
+    .iconBtn:hover{ border-color: rgba(255,255,255,0.22); }
+
+    .time {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 850;
+      min-width: 110px;
+      text-align: right;
+    }
+
+    .progressWrap{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+    }
+
+    .progressContainer{
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.08);
+      position: relative;
+      cursor: pointer;
+      overflow: visible;
+    }
+
+    .progressFill{
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(96,165,250,0.95), rgba(110,231,183,0.95));
+    }
+
+    .marker{
+      position:absolute;
+      top: -4px;
+      width: 6px;
+      height: 18px;
+      border-radius: 4px;
+      background: rgba(251,113,133,0.95);
+      box-shadow: 0 0 18px rgba(251,113,133,0.18);
+      transform: translateX(-50%);
+    }
+
+    .marker.done{ background: rgba(110,231,183,0.95); box-shadow: 0 0 18px rgba(110,231,183,0.18); }
+
+    .hintRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 18px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.55);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 900;
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity 200ms ease;
+      max-width: min(680px, calc(100vw - 32px));
+      text-align:center;
+    }
+    .toast.show { opacity: 1; }
+
+    /* Quiz modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(6px);
+      z-index: 50;
+    }
+    .modal.show { display:flex; }
+
+    .card {
+      width: min(760px, 100%);
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(15,23,42,0.92), rgba(2,6,23,0.86));
+      box-shadow: 0 14px 50px rgba(0,0,0,0.70);
+      overflow:hidden;
+    }
+    .cardHead {
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .qTitle {
+      font-size: 13px;
+      font-weight: 950;
+      color: var(--muted);
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+    }
+    .qText {
+      margin-top: 7px;
+      font-size: 18px;
+      font-weight: 950;
+      line-height: 1.25;
+    }
+
+    .cardBody {
+      padding: 14px 18px 18px;
+      display:grid;
+      gap: 10px;
+    }
+
+    .opt {
+      display:flex;
+      gap: 10px;
+      align-items:flex-start;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.16);
+      cursor:pointer;
+      user-select:none;
+    }
+    .opt:hover { border-color: rgba(255,255,255,0.22); }
+    .opt.correct { border-color: rgba(110,231,183,0.40); background: rgba(110,231,183,0.10); }
+    .opt.incorrect { border-color: rgba(251,113,133,0.40); background: rgba(251,113,133,0.10); }
+
+    .radio {
+      width: 18px; height: 18px;
+      border-radius: 999px;
+      border: 2px solid rgba(255,255,255,0.24);
+      margin-top: 1px;
+      flex: 0 0 auto;
+      position: relative;
+    }
+    .opt.selected .radio { border-color: rgba(96,165,250,0.85); }
+    .opt.selected .radio::after {
+      content:"";
+      position:absolute;
+      inset: 3px;
+      border-radius: 999px;
+      background: rgba(96,165,250,0.85);
+    }
+    .optText {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.35;
+      font-weight: 850;
+    }
+
+    .cardFoot {
+      padding: 14px 18px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .status {
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--muted);
+    }
+    .status.bad { color: var(--bad); }
+    .status.ok { color: var(--ok); }
+
+    @media (max-width: 640px) {
+      .title { font-size: 18px; }
+      .qText { font-size: 16px; }
+      .time { min-width: 92px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <div class="title">Test Module</div>
+        <div class="sub" id="accountLine"></div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <div class="pill" id="progressPill">0 / 0 questions</div>
+        <a class="btn" href="../../../index.html">Back to Portal</a>
+      </div>
+    </header>
+
+    <div class="panel">
+      <div class="videoShell">
+        <video id="video" preload="metadata" playsinline>
+          <source src="video.mp4" type="video/mp4" />
+        </video>
+
+        <div class="controls" aria-label="Video controls">
+          <button class="iconBtn" id="playBtn" aria-label="Play/Pause">▶</button>
+          <div class="progressWrap">
+            <div class="progressContainer" id="progressContainer" aria-label="Progress">
+              <div class="progressFill" id="progressFill"></div>
+            </div>
+            <div class="hintRow">
+              <div id="hintLeft"></div>
+              <div class="time" id="timeLabel">00:00 / 00:00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="modal" id="modal">
+    <div class="card" role="dialog" aria-modal="true" aria-label="Quiz checkpoint">
+      <div class="cardHead">
+        <div>
+          <div class="qTitle" id="qTitle">Question</div>
+          <div class="qText" id="qText">Question</div>
+        </div>
+        <div class="pill" id="qIndexPill">1 / 1</div>
+      </div>
+
+      <div class="cardBody" id="options"></div>
+
+      <div class="cardFoot">
+        <div class="status" id="qStatus">Select the correct answer to continue.</div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn" id="backBtn" style="opacity:0.95;">Back</button>
+          <button class="btn" id="continueBtn" style="border-color: rgba(96,165,250,0.35); display:none;">Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const WEBHOOK_URL = "https://structureproperties.app.n8n.cloud/webhook/37fc702d-8713-43f4-a1eb-22af8e3e2389";
+
+  const storedName = (localStorage.getItem("qs_full_name") || "").trim();
+  const storedEmail = (localStorage.getItem("qs_email") || "").trim();
+  const accountName = storedName || storedEmail || "Account";
+  document.getElementById("accountLine").textContent = "Signed in as " + accountName;
+
+  // Using the same questions/timestamps as the Mold & Leak Response video configuration.
+  const checkpoints = [
+    {
+      t: 58,
+      title: "Checkpoint 1",
+      q: "What should you do FIRST when a resident reports a mold concern?",
+      options: [
+        "Confirm the concern and document details",
+        "Schedule mold testing immediately",
+        "Tell them to clean it with bleach",
+        "Ignore it unless they send photos"
+      ],
+      correctIndex: 0
+    },
+    {
+      t: 73,
+      title: "Checkpoint 2",
+      q: "What is the first decision that must be made when evaluating a leak?",
+      options: [
+        "Whether insurance will cover it",
+        "Whether the leak is minor or major",
+        "Which vendor is cheapest",
+        "Whether mold is visible"
+      ],
+      correctIndex: 1
+    },
+    {
+      t: 86,
+      title: "Checkpoint 3",
+      q: "Why do porous materials increase mold risk?",
+      options: [
+        "They trap odors",
+        "They cannot be dried",
+        "They retain moisture beyond 48 hours",
+        "They attract pests"
+      ],
+      correctIndex: 2
+    },
+    {
+      t: 96,
+      title: "Checkpoint 4",
+      q: "Which type of water requires professional mitigation?",
+      options: [
+        "Clean drinking water",
+        "Condensation",
+        "Gray or black water",
+        "Rainwater only"
+      ],
+      correctIndex: 2
+    },
+    {
+      t: 115,
+      title: "Checkpoint 5",
+      q: "After how long does professional mitigation become mandatory?",
+      options: [
+        "Immediately",
+        "After 24 hours",
+        "Beyond 48 hours",
+        "Only if mold is visible"
+      ],
+      correctIndex: 2
+    },
+    {
+      t: 126,
+      title: "Checkpoint 6",
+      q: "For plumbing leaks, what is the correct initial response?",
+      options: [
+        "Schedule environmental testing first",
+        "Stop the water and contain the damage",
+        "Begin interior repairs immediately",
+        "Notify tenants only"
+      ],
+      correctIndex: 1
+    },
+    {
+      t: 144,
+      title: "Checkpoint 7",
+      q: "What environmental hazards may require testing after a leak is contained?",
+      options: [
+        "Mold only",
+        "Lead and asbestos only",
+        "Lead, asbestos, and mold",
+        "Carbon monoxide"
+      ],
+      correctIndex: 2
+    },
+    {
+      t: 162,
+      title: "Checkpoint 8",
+      q: "If a unit becomes uninhabitable due to a leak, what may be required?",
+      options: [
+        "Lease termination",
+        "Temporary tenant relocation with potential daily costs owed",
+        "Rent freeze only",
+        "No action"
+      ],
+      correctIndex: 1
+    },
+    {
+      t: 170,
+      title: "Checkpoint 9",
+      q: "When mold results from tenant behavior, what is the correct response?",
+      options: [
+        "Ignore the issue",
+        "Immediately begin mitigation",
+        "Reference the Mold Addendum and instruct on cleaning and ventilation",
+        "Evict the tenant"
+      ],
+      correctIndex: 2
+    },
+    {
+      t: 203,
+      title: "Checkpoint 10",
+      q: "When unsure how to proceed with mold or water intrusion, what should you do?",
+      options: [
+        "Make a judgment call",
+        "Wait for owner direction",
+        "Document and escalate",
+        "Close the request"
+      ],
+      correctIndex: 2
+    }
+  ];
+
+  const video = document.getElementById("video");
+  const toast = document.getElementById("toast");
+  const modal = document.getElementById("modal");
+  const qTitle = document.getElementById("qTitle");
+  const qText = document.getElementById("qText");
+  const qIndexPill = document.getElementById("qIndexPill");
+  const optionsEl = document.getElementById("options");
+  const qStatus = document.getElementById("qStatus");
+  const progressPill = document.getElementById("progressPill");
+  const playBtn = document.getElementById("playBtn");
+  const progressContainer = document.getElementById("progressContainer");
+  const progressFill = document.getElementById("progressFill");
+  const timeLabel = document.getElementById("timeLabel");
+  const backBtn = document.getElementById("backBtn");
+  const continueBtn = document.getElementById("continueBtn");
+
+  progressPill.textContent = "0 / " + checkpoints.length  + " questions";
+
+  // Seeking rule
+  let maxWatched = 0;
+  let lastTime = 0;
+
+  // Tracking
+  let startedAt = null;
+  let wrongCount = 0;
+  const answered = new Set();
+  let activeIndex = null;
+  let selectedIndex = null;
+  let completionSent = false;
+  const resumeStack = [0];
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2200);
+  }
+
+  function fmtTime(s){
+    s = Math.max(0, Math.floor(s || 0));
+    const m = String(Math.floor(s/60)).padStart(2,"0");
+    const r = String(s%60).padStart(2,"0");
+    return `${m}:${r}`;
+  }
+
+  function updateTimeLabel(){
+    const cur = video.currentTime || 0;
+    const dur = video.duration || 0;
+    timeLabel.textContent = `${fmtTime(cur)} / ${fmtTime(dur)}`;
+  }
+
+  function maxAllowedTime(){
+    // user can seek up to the next unanswered checkpoint (minus a hair)
+    const next = checkpoints.find((c, i) => !answered.has(i));
+    return next ? Math.max(0, next.t - 0.05) : (video.duration || 0);
+  }
+
+  function clampSeeking(target){
+    const allowed = Math.min(target, maxAllowedTime());
+    return Math.min(allowed, maxWatched + 0.05);
+  }
+
+  function renderMarkers(){
+    // clear old
+    [...progressContainer.querySelectorAll('.marker')].forEach(m => m.remove());
+    if (!video.duration) return;
+
+    checkpoints.forEach((c, i) => {
+      const m = document.createElement('div');
+      m.className = 'marker' + (answered.has(i) ? ' done' : '');
+      m.style.left = `${(c.t / video.duration) * 100}%`;
+      progressContainer.appendChild(m);
+    });
+  }
+
+  function setPlayIcon(){
+    playBtn.textContent = video.paused ? '▶' : '❚❚';
+  }
+
+  function openQuestion(i) {
+    activeIndex = i;
+    selectedIndex = null;
+    continueBtn.style.display = 'none';
+
+    const c = checkpoints[i];
+    qTitle.textContent = c.title || ("Question " + (i + 1));
+    qText.textContent = c.q;
+    qIndexPill.textContent = (i + 1) + " / " + checkpoints.length;
+    qStatus.className = "status";
+    qStatus.textContent = "Select the correct answer to continue.";
+
+    optionsEl.innerHTML = "";
+
+    c.options.forEach((opt, idx) => {
+      const row = document.createElement("div");
+      row.className = "opt";
+      row.innerHTML = '<div class="radio"></div><div class="optText"></div>';
+      row.querySelector(".optText").textContent = opt;
+
+      row.addEventListener("click", () => {
+        if (answered.has(i)) return;
+        selectedIndex = idx;
+        [...optionsEl.querySelectorAll(".opt")].forEach(el => el.classList.remove("selected"));
+        row.classList.add("selected");
+      });
+
+      optionsEl.appendChild(row);
+    });
+
+    backBtn.disabled = resumeStack.length <= 1;
+    modal.classList.add("show");
+  }
+
+  function closeQuestion() {
+    modal.classList.remove("show");
+    activeIndex = null;
+  }
+
+  async function postCompletion(payload) {
+    const res = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      keepalive: true
+    });
+    if (!res.ok) throw new Error("save_failed");
+    return true;
+  }
+
+  async function completeIfEligible(){
+    if (completionSent) return;
+    if (answered.size !== checkpoints.length) return;
+    if (!video.ended) return;
+
+    completionSent = true;
+
+    const totalSeconds = startedAt ? Math.max(1, Math.round((Date.now() - startedAt) / 1000)) : null;
+    const payload = {
+      event: "module_completed",
+      module_id: "test",
+      module_title: "Test Module",
+      account_name: accountName,
+      account_email: storedEmail || null,
+      total_questions: checkpoints.length,
+      questions_wrong: wrongCount,
+      total_time_seconds: totalSeconds,
+      completed_at: new Date().toISOString(),
+      user_agent: navigator.userAgent
+    };
+
+    try {
+      await postCompletion(payload);
+      localStorage.setItem("qs_completed_test", "1");
+      showToast("Completed. Returning to portal…");
+      setTimeout(() => {
+        window.location.href = "../../../index.html";
+      }, 900);
+    } catch (e) {
+      completionSent = false;
+      showToast("Couldn’t save completion. Check connection and try again.");
+    }
+  }
+
+  function maybeTriggerCheckpoint(){
+    if (!video.duration) return;
+
+    const ct = video.currentTime;
+    if (ct > maxWatched) maxWatched = ct;
+
+    // Detect a jump forward (skip)
+    if (ct - lastTime > 1.2 && ct > maxAllowedTime() + 0.15) {
+      video.currentTime = clampSeeking(maxWatched);
+      // skipping blocked
+    }
+
+    lastTime = video.currentTime;
+
+    // Show next unanswered question at timestamp
+    for (let i = 0; i < checkpoints.length; i++) {
+      if (answered.has(i)) continue;
+      if (ct >= checkpoints[i].t) {
+        video.pause();
+        setPlayIcon();
+        openQuestion(i);
+        break;
+      }
+    }
+  }
+
+  // Controls
+  playBtn.addEventListener('click', () => {
+    if (video.paused) video.play();
+    else video.pause();
+  });
+
+  video.addEventListener('play', () => {
+    if (!startedAt) startedAt = Date.now();
+    setPlayIcon();
+  });
+  video.addEventListener('pause', setPlayIcon);
+
+  video.addEventListener('loadedmetadata', () => {
+    updateTimeLabel();
+    renderMarkers();
+  });
+
+  video.addEventListener('timeupdate', () => {
+    updateTimeLabel();
+    if (video.duration) {
+      progressFill.style.width = ((video.currentTime / video.duration) * 100) + '%';
+    }
+    maybeTriggerCheckpoint();
+  });
+
+  progressContainer.addEventListener('click', (e) => {
+    if (!video.duration) return;
+    const rect = progressContainer.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    const target = pct * video.duration;
+    video.currentTime = clampSeeking(target);
+  });
+
+  video.addEventListener('seeking', () => {
+    const clamped = clampSeeking(video.currentTime);
+    if (Math.abs(clamped - video.currentTime) > 0.15) {
+      video.currentTime = clamped;
+      // skipping blocked
+    }
+  });
+
+  window.addEventListener('keydown', (e) => {
+    // prevent keyboard skipping ahead (ArrowRight/L)
+    if ((e.key === 'ArrowRight' || e.key.toLowerCase() === 'l') && !modal.classList.contains('show')) {
+      const proposed = video.currentTime + 5;
+      if (proposed > maxAllowedTime() + 0.1) {
+        e.preventDefault();
+        // skipping blocked
+      }
+    }
+  }, { passive: false });
+
+  video.addEventListener('ended', () => {
+    completeIfEligible();
+  });
+
+  video.addEventListener('error', () => {
+    showToast("Video unavailable for this module.");
+  });
+
+  // Modal actions
+  backBtn.addEventListener('click', () => {
+    if (resumeStack.length <= 1) return;
+    resumeStack.pop();
+    const t = resumeStack[resumeStack.length - 1] || 0;
+    closeQuestion();
+    video.currentTime = t;
+    video.play();
+  });
+
+  continueBtn.addEventListener('click', () => {
+    closeQuestion();
+    video.play();
+  });
+
+  // Option selection + submit-on-click behavior
+  optionsEl.addEventListener('click', (e) => {
+    const opt = e.target.closest('.opt');
+    if (!opt || activeIndex === null) return;
+    if (answered.has(activeIndex)) return;
+    if (selectedIndex === null) {
+      // (selection is stored in click handler; ignore)
+    }
+
+    // If user clicked directly on an option, evaluate immediately.
+    const all = [...optionsEl.querySelectorAll('.opt')];
+    const idx = all.indexOf(opt);
+    if (idx < 0) return;
+
+    const c = checkpoints[activeIndex];
+    const isCorrect = idx === c.correctIndex;
+
+    // clear previous incorrect styling
+    all.forEach(el => el.classList.remove('incorrect','correct'));
+
+    if (isCorrect) {
+      opt.classList.add('correct');
+      answered.add(activeIndex);
+
+      progressPill.textContent = answered.size + " / " + checkpoints.length  + " questions";
+
+      // record checkpoint (for Back)
+      resumeStack.push(Math.max(0, (c.t || video.currentTime) - 0.2));
+
+      qStatus.className = 'status ok';
+      qStatus.textContent = 'Correct. Continue.';
+      continueBtn.style.display = 'inline-flex';
+
+      renderMarkers();
+
+      // If they answered the last checkpoint and video is already ended, send completion.
+      completeIfEligible();
+    } else {
+      opt.classList.add('incorrect');
+      wrongCount += 1;
+
+      // Silent rewind on incorrect (no UI messaging)
+      const prevT = activeIndex > 0 ? checkpoints[activeIndex - 1].t : 0;
+      closeQuestion();
+      video.currentTime = Math.max(0, prevT);
+      video.play();
+    }
+  });
+
+  // Start paused
+  setPlayIcon();
+  updateTimeLabel();
+})();
+</script>
+</body>
+</html>
