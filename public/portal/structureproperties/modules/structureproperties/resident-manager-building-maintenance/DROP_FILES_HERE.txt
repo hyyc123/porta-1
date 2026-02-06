@@ -1,5 +1,0 @@
-Resident Manager Building Maintenance
-
-Drop these files into this folder:
-- quiz.html  (your exported quiz HTML)
-- thumb.png  (thumbnail image)
