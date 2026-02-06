@@ -1,0 +1,6 @@
+Move-Out Process
+
+Drop files here:
+- video.mp4
+- quiz.html
+- thumb.png
