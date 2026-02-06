@@ -1,6 +1,0 @@
-Bed Bug Remediation
-
-Drop files here:
-- video.mp4
-- quiz.html
-- thumb.png
