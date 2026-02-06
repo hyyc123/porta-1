@@ -2,32 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Module</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Training Module</title>
+
   <style>
     :root{
-      --bg:#0b0f19;--text:#e9eefc;--muted:#a7b4d6;
-      --border:rgba(255,255,255,0.10);--shadow:0 14px 50px rgba(0,0,0,0.55);
+      --bg:#020617;
+      --panel:rgba(255,255,255,.04);
+      --border:rgba(255,255,255,.10);
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --shadow:0 14px 50px rgba(0,0,0,.55);
       --r:18px;
+      --green: rgba(110,231,183,0.85);
+      --blue: rgba(96,165,250,0.85);
+      --red: rgba(248,113,113,0.9);
     }
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family:system-ui;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto;
       background:radial-gradient(1200px 700px at 10% 10%, rgba(96,165,250,0.18), transparent 55%),
                  radial-gradient(1000px 600px at 90% 20%, rgba(110,231,183,0.12), transparent 60%),
                  var(--bg);
       color:var(--text);
       padding:18px;
     }
-    header{max-width:1100px;margin:0 auto 14px;display:flex;align-items:center;gap:12px}
-    .meta{display:flex;flex-direction:column;gap:2px}
-    .meta .t{font-weight:950;font-size:16px}
+    header{
+      max-width:1100px;margin:0 auto 14px;
+      display:flex;align-items:center;gap:12px;
+    }
+    .meta{display:flex;flex-direction:column;gap:3px}
+    .meta .t{font-weight:950;font-size:18px}
     .meta .s{font-size:12px;color:var(--muted)}
     .right{margin-left:auto;display:flex;align-items:center;gap:10px}
-    .badge{font-size:11px;font-weight:950;padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:rgba(0,0,0,0.22);color:var(--muted)}
-    .badge.ok{border-color:rgba(96,165,250,0.55);background:rgba(96,165,250,0.14);color:#bfdbfe}
-    .badge.progress{border-color:rgba(96,165,250,0.35);background:rgba(96,165,250,0.10);color:#60a5fa}
+    .pill{
+      font-size:11px;font-weight:950;padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(0,0,0,0.20);color:var(--muted);
+      white-space:nowrap;
+    }
+    .pill.progress{border-color:rgba(96,165,250,0.45);background:rgba(96,165,250,0.12);color:#bfdbfe}
+    .pill.done{border-color:rgba(110,231,183,0.45);background:rgba(110,231,183,0.12);color:#bbf7d0}
+
     .btn{
       border:1px solid rgba(255,255,255,0.14);
       background:rgba(0,0,0,0.22);
@@ -36,125 +53,490 @@
       cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px
     }
     .btn.primary{border-color:rgba(110,231,183,0.35);background:rgba(110,231,183,0.12)}
+
     .wrap{max-width:1100px;margin:0 auto;display:grid;gap:14px}
     .panel{
       border:1px solid var(--border);
       border-radius:var(--r);
       background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
       box-shadow:var(--shadow);
-      overflow:hidden
+      overflow:hidden;
     }
-    .video{padding:14px}
-    video{width:100%;max-height:60vh;background:#020617;border-radius:12px;border:1px solid rgba(255,255,255,0.08)}
-    .quiz iframe{width:100%;height:56vh;border:0;background:#020617}
+
+    .videoBox{padding:14px}
+    video{
+      width:100%;
+      max-height:62vh;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.10);
+      background:#020617;
+    }
+
+    /* Custom progress with markers */
+    .controls{
+      padding:12px 14px 14px;
+      display:grid;
+      gap:10px;
+    }
+    .progressWrap{
+      position:relative;
+      height:18px;
+    }
+    input[type="range"]{
+      width:100%;
+      margin:0;
+      height:18px;
+      background:transparent;
+      -webkit-appearance:none;
+      appearance:none;
+    }
+    input[type="range"]::-webkit-slider-runnable-track{
+      height:6px;border-radius:999px;background:rgba(255,255,255,0.12);
+    }
+    input[type="range"]::-webkit-slider-thumb{
+      -webkit-appearance:none;
+      appearance:none;
+      width:16px;height:16px;border-radius:999px;
+      background:rgba(255,255,255,0.85);
+      border:2px solid rgba(0,0,0,0.35);
+      margin-top:-5px;
+      cursor:pointer;
+    }
+    .marker{
+      position:absolute;
+      top:2px;
+      width:10px;height:10px;border-radius:999px;
+      transform:translateX(-50%);
+      border:1px solid rgba(255,255,255,0.35);
+      background:rgba(96,165,250,0.55);
+      box-shadow:0 0 0 2px rgba(0,0,0,0.25);
+      pointer-events:none;
+    }
+    .marker.passed{background:rgba(110,231,183,0.75)}
+    .marker.active{background:rgba(248,113,113,0.85)}
+    .row{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      font-size:12px;color:var(--muted)
+    }
+
+    /* Quiz overlay */
+    .overlay{
+      position:fixed;inset:0;
+      display:none;
+      align-items:center;justify-content:center;
+      background:rgba(2,6,23,0.68);
+      backdrop-filter: blur(10px);
+      padding:18px;
+      z-index:9999;
+    }
+    .overlay.show{display:flex}
+    .quizCard{
+      width:min(760px, 100%);
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .quizHead{
+      padding:14px 16px;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+    }
+    .quizTitle{font-weight:950}
+    .quizBody{padding:16px}
+    .q{font-weight:900;margin-bottom:12px}
+    .answers{display:grid;gap:10px}
+    .ans{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(0,0,0,0.20);
+      color:var(--text);
+      font-weight:800;
+      cursor:pointer;
+      text-align:left;
+    }
+    .ans:hover{background:rgba(255,255,255,0.06)}
+    .ans.correct{border-color:rgba(110,231,183,0.55);background:rgba(110,231,183,0.12)}
+    .ans.wrong{border-color:rgba(248,113,113,0.65);background:rgba(248,113,113,0.12)}
+    .quizFoot{
+      padding:14px 16px;
+      border-top:1px solid rgba(255,255,255,0.08);
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      color:var(--muted);
+      font-size:12px;
+    }
   </style>
 </head>
-<body>
 
+<body>
 <header>
   <div class="meta">
-    <div class="t" id="title">Loading...</div>
-    <div class="s">Watch the video, then complete the quiz to finish.</div>
+    <div class="t" id="title">Loading…</div>
+    <div class="s">No skipping forward • Quiz gates at checkpoints • Wrong answers rewind</div>
   </div>
   <div class="right">
-    <span class="badge" id="statusBadge">NOT STARTED</span>
-    <button class="btn primary" id="startBtn">Start / Resume</button>
+    <span class="pill" id="statusPill">NOT STARTED</span>
+    <button class="btn primary" id="btnStart">Start / Resume</button>
     <a class="btn" href="../../../../index.html">Back</a>
   </div>
 </header>
 
 <div class="wrap">
-  <div class="panel video">
-    <video id="vid" controls preload="metadata" playsinline>
-      <source id="videoSource" src="" type="video/mp4" />
-      Your browser does not support the video tag.
-    </video>
-  </div>
+  <div class="panel">
+    <div class="videoBox">
+      <video id="video" preload="metadata" playsinline controls>
+        <source id="source" src="" type="video/mp4"/>
+      </video>
+    </div>
 
-  <div class="panel quiz">
-    <iframe id="quizFrame" src="./quiz.html"></iframe>
+    <div class="controls">
+      <div class="progressWrap" id="progressWrap">
+        <input id="progress" type="range" min="0" max="1000" value="0" step="1"/>
+        <!-- markers injected here -->
+      </div>
+
+      <div class="row">
+        <div id="leftInfo">Watch time: 00:00 • Wrong: 0</div>
+        <div id="rightInfo">Checkpoints: 0/0</div>
+      </div>
+    </div>
   </div>
 </div>
 
+<!-- Quiz Overlay -->
+<div class="overlay" id="overlay">
+  <div class="quizCard">
+    <div class="quizHead">
+      <div class="quizTitle" id="cpTitle">Checkpoint</div>
+      <div class="pill progress" id="cpPill">QUIZ REQUIRED</div>
+    </div>
+    <div class="quizBody">
+      <div class="q" id="qText">Question</div>
+      <div class="answers" id="answers"></div>
+    </div>
+    <div class="quizFoot">
+      <div id="quizHint">Answer correctly to continue.</div>
+      <div id="quizProgress">1/1</div>
+    </div>
+  </div>
+</div>
+
+<script src="./quiz-data.js"></script>
+
 <script>
-  const MODULE_ID = location.pathname.split("/").slice(-2, -1)[0]; // folder name
-  const kStarted = "qs_started_" + MODULE_ID;
-  const kCompleted = "qs_completed_" + MODULE_ID;
+  // ---- Helpers
+  const pad = (n) => String(n).padStart(2,"0");
+  const fmt = (s) => `${pad(Math.floor(s/60))}:${pad(Math.floor(s%60))}`;
 
-  const statusBadge = document.getElementById("statusBadge");
-  const startBtn = document.getElementById("startBtn");
-  const vid = document.getElementById("vid");
+  // Identify moduleId from folder name
+  const moduleId = location.pathname.split("/").slice(-2, -1)[0];
 
-  function setBadge(txt, cls){
-    statusBadge.textContent = txt;
-    statusBadge.className = "badge " + (cls || "");
+  const kStarted   = "qs_started_"   + moduleId;
+  const kCompleted = "qs_completed_" + moduleId;
+  const kWatch     = "qs_watch_"     + moduleId;
+  const kWrong     = "qs_wrong_"     + moduleId;
+  const kPassed    = "qs_passed_"    + moduleId; // JSON array of passed checkpoint indexes
+  const kMaxAllow  = "qs_maxallow_"  + moduleId; // furthest allowed time
+
+  // DOM
+  const titleEl = document.getElementById("title");
+  const statusPill = document.getElementById("statusPill");
+  const btnStart = document.getElementById("btnStart");
+  const video = document.getElementById("video");
+  const source = document.getElementById("source");
+  const progress = document.getElementById("progress");
+  const progressWrap = document.getElementById("progressWrap");
+  const leftInfo = document.getElementById("leftInfo");
+  const rightInfo = document.getElementById("rightInfo");
+
+  const overlay = document.getElementById("overlay");
+  const cpTitle = document.getElementById("cpTitle");
+  const qText = document.getElementById("qText");
+  const answers = document.getElementById("answers");
+  const quizProgress = document.getElementById("quizProgress");
+
+  // Data
+  const quiz = window.QS_QUIZ;
+  const checkpoints = (quiz?.checkpoints || []).slice().sort((a,b)=>a.t-b.t);
+
+  let duration = 0;
+  let watchSeconds = Number(localStorage.getItem(kWatch) || "0");
+  let wrongAnswers = Number(localStorage.getItem(kWrong) || "0");
+  let passed = JSON.parse(localStorage.getItem(kPassed) || "[]"); // indexes
+  let maxAllowed = Number(localStorage.getItem(kMaxAllow) || "0");
+
+  let activeCheckpointIndex = null;
+  let activeQuestionIndex = 0;
+
+  // ---- Status
+  function setPill(text, cls){
+    statusPill.textContent = text;
+    statusPill.className = "pill " + (cls || "");
   }
-
   function refreshStatus(){
-    const startedAt = localStorage.getItem(kStarted);
-    const completedAt = localStorage.getItem(kCompleted);
-    if (completedAt) setBadge("COMPLETED", "ok");
-    else if (startedAt) setBadge("IN PROGRESS", "progress");
-    else setBadge("NOT STARTED", "");
+    const started = localStorage.getItem(kStarted);
+    const completed = localStorage.getItem(kCompleted);
+    if (completed) setPill("COMPLETED", "done");
+    else if (started) setPill("IN PROGRESS", "progress");
+    else setPill("NOT STARTED", "");
   }
-
   function markStarted(){
-    if (!localStorage.getItem(kStarted)) {
-      localStorage.setItem(kStarted, new Date().toISOString());
-    }
+    if (!localStorage.getItem(kStarted)) localStorage.setItem(kStarted, new Date().toISOString());
+  }
+  function markCompleted(){
+    if (!localStorage.getItem(kCompleted)) localStorage.setItem(kCompleted, new Date().toISOString());
+    refreshStatus();
   }
 
+  // ---- Markers
+  function clearMarkers(){
+    Array.from(progressWrap.querySelectorAll(".marker")).forEach(m=>m.remove());
+  }
+  function renderMarkers(){
+    clearMarkers();
+    if (!duration) return;
+    checkpoints.forEach((cp, idx)=>{
+      const x = (cp.t / duration) * 100;
+      const m = document.createElement("div");
+      m.className = "marker" + (passed.includes(idx) ? " passed" : "");
+      m.style.left = `${Math.max(0, Math.min(100, x))}%`;
+      m.title = cp.title ? `${cp.title} (${fmt(cp.t)})` : `Checkpoint (${fmt(cp.t)})`;
+      progressWrap.appendChild(m);
+    });
+  }
+  function setActiveMarker(idx){
+    Array.from(progressWrap.querySelectorAll(".marker")).forEach((m,i)=>{
+      m.classList.toggle("active", i === idx && !passed.includes(i));
+      m.classList.toggle("passed", passed.includes(i));
+    });
+  }
+
+  // ---- UI Stats
+  function refreshStats(){
+    leftInfo.textContent = `Watch time: ${fmt(watchSeconds)} • Wrong: ${wrongAnswers}`;
+    rightInfo.textContent = `Checkpoints: ${passed.length}/${checkpoints.length}`;
+  }
+
+  // ---- Load module.json for title + Blob video url
   async function loadModuleConfig(){
     const res = await fetch("./module.json", { cache: "no-store" });
     const cfg = await res.json();
-
-    document.title = cfg.title + " • Structure Properties";
-    document.getElementById("title").textContent = cfg.title;
-
-    const sourceEl = document.getElementById("videoSource");
-    sourceEl.src = cfg.videoUrl;
-    vid.load();
+    titleEl.textContent = cfg.title || "Training Module";
+    document.title = `${cfg.title || "Training Module"} • Structure Properties`;
+    source.src = (cfg.videoUrl || "").trim();
+    video.load();
   }
 
-  async function handleQuizCompleted(evtData){
-    markStarted();
-    if (!localStorage.getItem(kCompleted)) {
-      localStorage.setItem(kCompleted, new Date().toISOString());
+  // ---- No-skip logic
+  function clampSeek(){
+    // allow small drift
+    const allowed = maxAllowed + 0.35;
+    if (video.currentTime > allowed){
+      video.currentTime = maxAllowed;
     }
-
-    // If your quiz sends wrongAnswers/totalQuestions, we keep them for later
-    if (evtData?.wrongAnswers !== undefined) {
-      localStorage.setItem("qs_wrong_" + MODULE_ID, String(evtData.wrongAnswers));
-    }
-    if (evtData?.totalQuestions !== undefined) {
-      localStorage.setItem("qs_total_" + MODULE_ID, String(evtData.totalQuestions));
-    }
-
-    refreshStatus();
-    alert("Completed!");
   }
 
-  startBtn.addEventListener("click", () => {
+  // ---- Determine next checkpoint that isn't passed
+  function nextUnpassedCheckpointIndex(){
+    for (let i=0;i<checkpoints.length;i++){
+      if (!passed.includes(i)) return i;
+    }
+    return null;
+  }
+
+  // ---- Gate at checkpoints
+  function maybeTriggerCheckpoint(){
+    const idx = nextUnpassedCheckpointIndex();
+    if (idx === null) return;
+    const cp = checkpoints[idx];
+
+    // If we've reached (or passed) this checkpoint time, pause and show quiz
+    if (video.currentTime >= cp.t - 0.15){
+      // lock maxAllowed at checkpoint time until passed
+      maxAllowed = Math.min(Math.max(maxAllowed, cp.t), duration || cp.t);
+      localStorage.setItem(kMaxAllow, String(maxAllowed));
+
+      activeCheckpointIndex = idx;
+      activeQuestionIndex = 0;
+      showQuiz();
+    }
+  }
+
+  // ---- Quiz overlay
+  function showQuiz(){
+    if (activeCheckpointIndex === null) return;
+    video.pause();
     markStarted();
     refreshStatus();
-    vid.play().catch(()=>{});
-  });
 
-  window.addEventListener("message", (evt) => {
-    if (!evt?.data) return;
-    if (evt.data.type === "qs_quiz_completed") {
-      handleQuizCompleted(evt.data);
+    const cp = checkpoints[activeCheckpointIndex];
+    cpTitle.textContent = cp.title ? `${cp.title} • ${fmt(cp.t)}` : `Checkpoint • ${fmt(cp.t)}`;
+
+    renderQuestion();
+    setActiveMarker(activeCheckpointIndex);
+
+    overlay.classList.add("show");
+  }
+
+  function hideQuiz(){
+    overlay.classList.remove("show");
+    activeCheckpointIndex = null;
+    activeQuestionIndex = 0;
+    setActiveMarker(null);
+  }
+
+  function renderQuestion(){
+    const cp = checkpoints[activeCheckpointIndex];
+    const q = cp.questions[activeQuestionIndex];
+
+    qText.textContent = q.q;
+    answers.innerHTML = "";
+    quizProgress.textContent = `${activeQuestionIndex + 1}/${cp.questions.length}`;
+
+    q.a.forEach((label, idx)=>{
+      const btn = document.createElement("button");
+      btn.className = "ans";
+      btn.type = "button";
+      btn.textContent = label;
+
+      btn.addEventListener("click", ()=>{
+        // disable all
+        Array.from(answers.querySelectorAll("button")).forEach(b=>b.disabled=true);
+
+        if (idx === q.correct){
+          btn.classList.add("correct");
+
+          // next question in same checkpoint
+          setTimeout(()=>{
+            activeQuestionIndex++;
+            if (activeQuestionIndex < cp.questions.length){
+              renderQuestion();
+            } else {
+              // checkpoint passed
+              if (!passed.includes(activeCheckpointIndex)){
+                passed.push(activeCheckpointIndex);
+                passed = passed.sort((a,b)=>a-b);
+                localStorage.setItem(kPassed, JSON.stringify(passed));
+              }
+
+              // allow play forward now (set maxAllowed to currentTime)
+              maxAllowed = Math.max(maxAllowed, video.currentTime);
+              localStorage.setItem(kMaxAllow, String(maxAllowed));
+
+              renderMarkers();
+              refreshStats();
+
+              hideQuiz();
+
+              // completed?
+              if (passed.length === checkpoints.length){
+                markCompleted();
+              }
+
+              // continue playing
+              video.play().catch(()=>{});
+            }
+          }, 450);
+
+        } else {
+          btn.classList.add("wrong");
+          wrongAnswers++;
+          localStorage.setItem(kWrong, String(wrongAnswers));
+          refreshStats();
+
+          // rewind to previous checkpoint (or 0)
+          const prevIdx = Math.max(0, activeCheckpointIndex - 1);
+          const rewindTo = prevIdx === activeCheckpointIndex ? 0 : checkpoints[prevIdx].t;
+
+          setTimeout(()=>{
+            hideQuiz();
+            video.currentTime = rewindTo;
+            maxAllowed = Math.min(maxAllowed, rewindTo);
+            localStorage.setItem(kMaxAllow, String(maxAllowed));
+            video.play().catch(()=>{});
+          }, 650);
+        }
+      });
+
+      answers.appendChild(btn);
+    });
+  }
+
+  // ---- Progress bar sync
+  function syncProgress(){
+    if (!duration) return;
+    const v = Math.round((video.currentTime / duration) * 1000);
+    progress.value = String(v);
+  }
+
+  progress.addEventListener("input", ()=>{
+    if (!duration) return;
+    const target = (Number(progress.value)/1000) * duration;
+    // only allow backward seeking freely; forward only up to maxAllowed
+    if (target <= maxAllowed + 0.35) {
+      video.currentTime = target;
+    } else {
+      // snap back
+      progress.value = String(Math.round((maxAllowed / duration) * 1000));
+      video.currentTime = maxAllowed;
     }
   });
 
-  loadModuleConfig().catch(err => {
-    console.error(err);
-    document.getElementById("title").textContent = "Missing module.json";
-    alert("module.json missing or invalid in this folder.");
+  // ---- Video events
+  video.addEventListener("loadedmetadata", ()=>{
+    duration = video.duration || 0;
+    renderMarkers();
+    refreshStats();
+
+    // restore last allowed cap
+    maxAllowed = Math.max(maxAllowed, 0);
+    localStorage.setItem(kMaxAllow, String(maxAllowed));
   });
 
-  refreshStatus();
+  video.addEventListener("timeupdate", ()=>{
+    if (!duration) return;
+
+    // watch time (count only when playing)
+    if (!video.paused && !video.ended && !overlay.classList.contains("show")){
+      watchSeconds += 1/4; // timeupdate ~4x/sec, approximate
+      if (watchSeconds % 1 < 0.26) { // save about once/sec
+        localStorage.setItem(kWatch, String(Math.floor(watchSeconds)));
+      }
+    }
+
+    // update maxAllowed continuously (this is what prevents skipping forward)
+    if (!overlay.classList.contains("show")){
+      maxAllowed = Math.max(maxAllowed, video.currentTime);
+      localStorage.setItem(kMaxAllow, String(maxAllowed));
+    }
+
+    clampSeek();
+    syncProgress();
+    refreshStats();
+
+    if (!overlay.classList.contains("show")){
+      maybeTriggerCheckpoint();
+    }
+  });
+
+  video.addEventListener("seeking", clampSeek);
+  video.addEventListener("seeked", clampSeek);
+
+  // ---- Buttons
+  btnStart.addEventListener("click", ()=>{
+    markStarted();
+    refreshStatus();
+    video.play().catch(()=>{});
+  });
+
+  // ---- Init
+  (async function init(){
+    refreshStatus();
+    refreshStats();
+    await loadModuleConfig();
+  })();
 </script>
-
 </body>
 </html>
